@@ -1,0 +1,55 @@
+{"global_step": 1, "unit": null, "extras": [{"value": "8.255", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:25:50.189199Z", "value": 107.94534279781178}
+{"global_step": 10, "unit": null, "extras": [{"value": "8.376", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:26:00.916493Z", "value": 107.48642617539792}
+{"global_step": 20, "unit": null, "extras": [{"value": "8.221", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:26:12.857343Z", "value": 107.34708692179008}
+{"global_step": 30, "unit": null, "extras": [{"value": "8.267", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:26:24.751901Z", "value": 107.43945616719982}
+{"global_step": 40, "unit": null, "extras": [{"value": "8.231", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:26:36.671997Z", "value": 107.42815699177659}
+{"global_step": 50, "unit": null, "extras": [{"value": "8.052", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:26:48.636559Z", "value": 107.3420145744404}
+{"global_step": 60, "unit": null, "extras": [{"value": "8.246", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:27:00.559584Z", "value": 107.3462852473899}
+{"global_step": 70, "unit": null, "extras": [{"value": "8.213", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:27:12.514845Z", "value": 107.30789800480844}
+{"global_step": 80, "unit": null, "extras": [{"value": "8.279", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:27:24.454117Z", "value": 107.29670827530627}
+{"global_step": 90, "unit": null, "extras": [{"value": "8.151", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:27:36.481197Z", "value": 107.20053040480785}
+{"global_step": 100, "unit": null, "extras": [{"value": "8.186", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:27:48.525780Z", "value": 107.10820060543652}
+{"global_step": 110, "unit": null, "extras": [{"value": "8.067", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:28:00.656571Z", "value": 106.9625870588811}
+{"global_step": 120, "unit": null, "extras": [{"value": "8.261", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:28:12.747986Z", "value": 106.87088430123548}
+{"global_step": 130, "unit": null, "extras": [{"value": "8.399", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:28:24.835467Z", "value": 106.79608059290265}
+{"global_step": 140, "unit": null, "extras": [{"value": "8.173", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:28:36.917482Z", "value": 106.73587336355975}
+{"global_step": 150, "unit": null, "extras": [{"value": "8.100", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:28:48.954690Z", "value": 106.70988717285665}
+{"global_step": 160, "unit": null, "extras": [{"value": "8.211", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:29:01.033759Z", "value": 106.66398863098753}
+{"global_step": 170, "unit": null, "extras": [{"value": "8.038", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:29:13.145818Z", "value": 106.60650245401904}
+{"global_step": 180, "unit": null, "extras": [{"value": "8.276", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:29:25.241853Z", "value": 106.56317835815692}
+{"global_step": 190, "unit": null, "extras": [{"value": "8.212", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:29:37.338081Z", "value": 106.52439324760434}
+{"global_step": 200, "unit": null, "extras": [{"value": "8.210", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:29:49.419283Z", "value": 106.49634189297261}
+{"global_step": 210, "unit": null, "extras": [{"value": "8.063", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:30:01.478462Z", "value": 106.47990030926263}
+{"global_step": 220, "unit": null, "extras": [{"value": "8.133", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:30:13.541219Z", "value": 106.46360393798801}
+{"global_step": 230, "unit": null, "extras": [{"value": "8.178", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:30:25.674858Z", "value": 106.42167958756748}
+{"global_step": 240, "unit": null, "extras": [{"value": "8.243", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:30:37.789204Z", "value": 106.39016838432872}
+{"global_step": 250, "unit": null, "extras": [{"value": "8.091", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:30:49.861692Z", "value": 106.37594213403956}
+{"global_step": 260, "unit": null, "extras": [{"value": "8.098", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:31:01.992084Z", "value": 106.34339991475701}
+{"global_step": 270, "unit": null, "extras": [{"value": "8.149", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:31:14.085477Z", "value": 106.32521476925376}
+{"global_step": 280, "unit": null, "extras": [{"value": "8.286", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:31:26.204839Z", "value": 106.3001636625551}
+{"global_step": 290, "unit": null, "extras": [{"value": "8.203", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:31:38.304248Z", "value": 106.28305098592156}
+{"global_step": 300, "unit": null, "extras": [{"value": "8.094", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:31:50.416886Z", "value": 106.26306399479327}
+{"global_step": 310, "unit": null, "extras": [{"value": "7.991", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:32:02.500748Z", "value": 106.25255594705996}
+{"global_step": 320, "unit": null, "extras": [{"value": "8.021", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:32:14.619216Z", "value": 106.23330778431684}
+{"global_step": 330, "unit": null, "extras": [{"value": "8.053", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:32:26.689859Z", "value": 106.22787845802847}
+{"global_step": 340, "unit": null, "extras": [{"value": "8.237", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:32:38.813423Z", "value": 106.20904252627433}
+{"global_step": 350, "unit": null, "extras": [{"value": "8.049", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:32:50.955407Z", "value": 106.18678262241711}
+{"global_step": 360, "unit": null, "extras": [{"value": "8.001", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:33:03.078531Z", "value": 106.17028148039806}
+{"global_step": 370, "unit": null, "extras": [{"value": "8.063", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:33:15.197203Z", "value": 106.1557585646851}
+{"global_step": 380, "unit": null, "extras": [{"value": "8.050", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:33:27.301991Z", "value": 106.14531523633322}
+{"global_step": 390, "unit": null, "extras": [{"value": "8.086", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:33:39.464317Z", "value": 106.12231013314083}
+{"global_step": 400, "unit": null, "extras": [{"value": "8.028", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:33:51.608102Z", "value": 106.10453966944473}
+{"global_step": 410, "unit": null, "extras": [{"value": "8.031", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:34:03.780028Z", "value": 106.08169871400823}
+{"global_step": 420, "unit": null, "extras": [{"value": "8.140", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:34:15.902119Z", "value": 106.07027854826322}
+{"global_step": 430, "unit": null, "extras": [{"value": "7.951", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:34:28.024393Z", "value": 106.0593559317755}
+{"global_step": 440, "unit": null, "extras": [{"value": "7.995", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:34:40.071223Z", "value": 106.0640982799048}
+{"global_step": 450, "unit": null, "extras": [{"value": "7.973", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:34:52.212457Z", "value": 106.05010922106959}
+{"global_step": 460, "unit": null, "extras": [{"value": "8.048", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:35:04.290693Z", "value": 106.04875221964568}
+{"global_step": 470, "unit": null, "extras": [{"value": "7.990", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:35:16.417184Z", "value": 106.03854819138985}
+{"global_step": 480, "unit": null, "extras": [{"value": "8.043", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:35:28.530792Z", "value": 106.0310151647404}
+{"global_step": 490, "unit": null, "extras": [{"value": "8.071", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:35:40.627732Z", "value": 106.02678642477211}
+{"global_step": 500, "unit": null, "extras": [{"value": "7.931", "name": "loss"}], "name": "current_examples_per_sec", "timestamp": "2019-03-19T12:35:52.734841Z", "value": 106.0210353323356}
+{"global_step": 500, "unit": null, "extras": [], "name": "average_examples_per_sec", "timestamp": "2019-03-19T12:35:52.735384Z", "value": 106.00716643401292}
+{"value": 292.85418723309664, "timestamp": "2019-03-19T12:37:07.222388Z", "extras": [], "unit": null, "name": "eval_average_examples_per_sec", "global_step": 510}
+{"value": 0.00078125, "timestamp": "2019-03-19T12:37:07.224067Z", "extras": [], "unit": null, "name": "eval_top_1_accuracy", "global_step": 510}
+{"value": 0.004609375, "timestamp": "2019-03-19T12:37:07.224237Z", "extras": [], "unit": null, "name": "eval_top_5_accuracy", "global_step": 510}
