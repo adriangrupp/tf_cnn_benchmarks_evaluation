@@ -1,3 +1,9 @@
+#############################################################################
+#TODO description
+
+# Author: Adrian Grupp
+#############################################################################
+
 import os
 import json
 from datetime import datetime
@@ -51,7 +57,7 @@ def histImgSec(plotData, metaData, outDir, std=False):
     """ Function to plot histogams that compare images/sec for 
         different amount of gpus and models. 1 Diagramm per dataset.
     """
-    datasets = ['CIFAR10', 'Synthetic', 'ImageNet-']  #TODO better name of imagenet
+    datasets = ['CIFAR10', 'Synthetic', 'ImageNet'] 
     models = ['ResNet50', 'ResNet56', 'AlexNet']
 
     # One plot for each dataset to compare models' performance
@@ -123,7 +129,7 @@ def histCompareRealSynth(plotData, metaData, outDir):
         different amount of gpus. Compares real to synth data. 
         Works only for imagenet - cifar10 has diferent models
     """
-    datasets = ['ImageNet-', 'Synthetic']  #TODO better names
+    datasets = ['ImageNet', 'Synthetic'] 
     models = ['ResNet50', 'AlexNet']
 
     # One plot for each model to compare individually
@@ -162,8 +168,7 @@ def histCompareTwoSets(plotData1, plotData2, metaData, outDir):
     """
     #TODO: Nicer bars
     #TODO: Nicer text
-    #TODO: synthetic data
-    datasets = ['Synthetic', 'ImageNet-', 'CIFAR10']  #TODO better names
+    datasets = ['Synthetic', 'ImageNet', 'CIFAR10'] 
     models = ['AlexNet', 'ResNet50', 'ResNet56']
 
     # One plot for each dataset and model to have all comparisons
@@ -244,7 +249,7 @@ def plotScaling(plotData, metaData, outDir):
     """
     #TODO: nicer grid
     #TODO: avoid empty plots
-    datasets = ['Synthetic', 'ImageNet-', 'CIFAR10']  #TODO better names
+    datasets = ['Synthetic', 'ImageNet', 'CIFAR10']  
     models = ['AlexNet', 'ResNet50', 'ResNet56']
 
     # One plot for each dataset 
@@ -279,10 +284,10 @@ def plotScaling(plotData, metaData, outDir):
 
         plt.xticks([1,2,3,4], [1,2,3,4])
         plt.xlabel('#GPUs')
-        plt.ylabel('Scaling')
+        plt.ylabel('Speedup')
     
         plt.legend(loc=2, fontsize="small")
-        plt.title('Scaling: %s - %s - %s Dataset' %(metaData[0], metaData[1], ds))
+        plt.title('Speedup: %s - %s - %s Dataset' %(metaData[0], metaData[1], ds))
         plt.grid()
 
         filename = ds + '- scaling.png'
@@ -339,8 +344,10 @@ if __name__ == "__main__":
     histImgSec(plotData, metaData[1], outDir)
     """
 
-    # Plot bar charts for imgs/sec per num_gpu to compare models
-    # Per dataset, all folders
+    # Plot bar charts for all folders:
+    # 1) Imgs/sec per num_gpu to compare models, per dataset.
+    # 2) Comparison of synthetic vs real data (imagenet).
+    # 3) Scaling single folder, real&synth extra
     for i,f in enumerate(folders):
         procFiles = os.path.join(resultDir, f)
         print('Processing: ' + procFiles)
@@ -350,18 +357,9 @@ if __name__ == "__main__":
             if not os.path.exists(outDir):
                 os.makedirs(outDir)
             histImgSec(plotData, metaData[i], outDir)
-   
-    # Plot comparison of synthetic vs real data(imagenet), all folders
-    for i,f in enumerate(folders):
-        procFiles = os.path.join(resultDir, f)
-        print('Processing: ' + procFiles)
-        plotData = readFiles(procFiles)
-        if plotData:
-            outDir = os.path.join(plotDir, f)
-            if not os.path.exists(outDir):
-                os.makedirs(outDir)
             histCompareRealSynth(plotData, metaData[i], outDir)
-
+            plotScaling(plotData, metaData[i], outDir)  
+ 
     # Plot comparison between singularity & udocker, all machines, all data 
     for i in [0,1,4,5]:
         procFiles1 = os.path.join(resultDir, folders[i])
@@ -393,13 +391,6 @@ if __name__ == "__main__":
     # Plot scaling 500 batches, real + synth
     #TODO
 
-    # Plot scaling single folder, all folders, real&synth extra
-    for i,f in enumerate(folders):
-        procFiles = os.path.join(resultDir, f)
-        plotData = readFiles(procFiles)
-        print('Processing: ' + procFiles)
-        if plotData:
-            outDir = os.path.join(plotDir, f)
-            if not os.path.exists(outDir):
-                os.makedirs(outDir)
-            plotScaling(plotData, metaData[i], outDir)
+    # Plot scaling comparison per dataset, udocker vs sing, lsdf
+    # vs fh2
+    #TODO

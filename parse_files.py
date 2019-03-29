@@ -3,6 +3,7 @@
 # Calculates Average results for metric.log as well as standard deviation, if #
 # multiple runs were run. (stdev=0 if only 1 run).                            #
 # Furthermore extracts important parameters for plotting of the runs.         #
+# Author: Adrian Grupp                                                        #
 ###############################################################################
 
 import os
@@ -107,10 +108,15 @@ def getRunParameters(benchmarkFile):
             if el['name'] == "model":
                 benchParams[el['name']] = el['string_value']
             if el['name'] == "dataset":
-                benchParams[el['name']] = el['string_value']
+                if 'synthetic' in el['string_value']:
+                    benchParams[el['name']] = 'synthetic'
+                else:
+                    benchParams[el['name']] = el['string_value']
             if el['name'] == "num_epochs":
                 benchParams[el['name']] = el["float_value"]
             if el['name'] == "num_batches":
+                benchParams[el['name']] = el["long_value"]
+            if el['name'] == "batch_size":
                 benchParams[el['name']] = el["long_value"]
             if el['name'] == "devices":
                 deviceList = el['string_value'].split(',')
