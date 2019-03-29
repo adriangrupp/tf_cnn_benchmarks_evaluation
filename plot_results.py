@@ -50,8 +50,8 @@ def getBenchParams(data):
 
 
 ### Histogramm Images/sec for 1,2,4 gpus, no dataset comaprison
-#TODO: aesthetics
-#TODO: avoid empty plots (dic not in plotData) 
+#TODO colors of bars
+#TODO avoid empty plots (dic not in plotData) 
 def histImgSec(plotData, metaData, outDir, std=False):
     """ Function to plot histogams that compare images/sec for 
         different amount of gpus and models. 1 Diagramm per dataset.
@@ -65,8 +65,8 @@ def histImgSec(plotData, metaData, outDir, std=False):
         ax.set_axisbelow(True)
         ax.grid(True, axis='y', linewidth=.4)
 
-        i = 1
-        width = 0.25
+        i = 0
+        width = 0.9
         labels = []
         labelsPos = []
 
@@ -89,24 +89,24 @@ def histImgSec(plotData, metaData, outDir, std=False):
             examples_per_sec_sort = np.array(examples_per_sec)[gpus_idx].astype(int)
             stdevs_sort = np.array(stdevs)[gpus_idx]
 
-            plotData_x = list(np.arange(i, i+len(examples_per_sec)*0.25, 0.25))
+            plotData_x = list(np.arange(5*i, 5*i+len(examples_per_sec)))
             labelsPos.append(plotData_x[1]) #middle
             labels.append(m)
-
 
             # Bar chart
             pl = plt.bar(plotData_x, examples_per_sec_sort, width,
                 align='center', color=['lawngreen', 'forestgreen', 'darkgreen']
                 , alpha=0.7, edgecolor='w')
             # Standard deviation
-            #TODO aesthetics
+            #TODO style 
             if (std):
                 plt.errorbar(plotData_x, examples_per_sec_sort,
                         yerr=stdevs_sort, fmt='k.', ecolor='k', elinewidth=2)
             # Bar labels
-            for j, v in enumerate(examples_per_sec_sort):
-                plt.text(i + j * width - width/2, v + 3, str("%i" % v),
-                        color='k', fontsize='small')
+            else:
+                for j, v in enumerate(examples_per_sec_sort):
+                    plt.text(plotData_x[j] - width/4, v + 4, str("%i" % v),
+                            color='k', fontsize='small')
             i+=1
 
         if len(labels) == 0:
@@ -128,8 +128,6 @@ def histImgSec(plotData, metaData, outDir, std=False):
 
 ## Histogram comparison real synthetic per num_gpu
 def histCompareRealSynth(plotData, metaData, outDir):
-#TODO: Nicer bars
-#TODO: Nicer text
     """ Function to compare histogams that compare images/sec for 
         different amount of gpus. Compares real to synth data. 
         Works only for imagenet - cifar10 has diferent models
@@ -171,8 +169,6 @@ def histCompareTwoSets(plotData1, plotData2, metaData, outDir):
         Requires: same dataset, same model.
         Currently only doing real datasets!
     """
-    #TODO: Nicer bars
-    #TODO: Nicer text
     datasets = ['Synthetic', 'ImageNet', 'CIFAR10'] 
     models = ['AlexNet', 'ResNet50', 'ResNet56']
 
@@ -225,12 +221,12 @@ def plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, metaData, outPath
     p1 = plt.bar(pos, ex_per_sec_1_sort, width,
             align='center', facecolor='r', alpha=0.5, edgecolor='w')
     for j, v in enumerate(ex_per_sec_1_sort):
-        plt.text(j - width/2, v + 3, str("%i" % v), color='k')
+        plt.text(j - width + 0.15, v + 4, str("%i" % v), color='k')
     # second set plots 
     p2 = plt.bar([p + width for p in pos], ex_per_sec_2_sort, width,
             align='center', facecolor='g', alpha=0.5, edgecolor='w')
     for j, v in enumerate(ex_per_sec_2_sort):
-        plt.text(j + width/2, v + 3, str("%i" % v), color='k')
+        plt.text(j + width - 0.1, v + 4, str("%i" % v), color='k')
     # Bar labels
     labelsPos = [p + width/2 for p in pos]
     labels = sorted(gpus_2)
@@ -240,7 +236,7 @@ def plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, metaData, outPath
     plt.xlabel('#GPUs')
     plt.ylabel('Images/sec')
 
-    plt.legend((p1[0], p2[0]), (metaData[0], metaData[1]))
+    plt.legend((p1[0], p2[0]), (metaData[0], metaData[1]), fontsize="small")
     plt.title('%s vs %s - %s - %s ' %(metaData[0], metaData[1], metaData[2],
         metaData[4])) #TODO maybe add epochs to title
     plt.savefig(outPath)
@@ -312,7 +308,8 @@ def plotScaling(plotData, metaData, outDir):
 #-----------------------------------------------------------------
 if __name__ == "__main__":
     #TODO argv for selection of plot mode?
-    #TODO Verbose output for data being processed
+    #TODO useful output for data being processed
+    #TODO: Nicer text?
 
     # Dir for benchmark data
     wd = os.getcwd()
