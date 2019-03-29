@@ -50,7 +50,6 @@ def getBenchParams(data):
 
 
 ### Histogramm Images/sec for 1,2,4 gpus, no dataset comaprison
-#TODO: coloured bars per gpu + Legend
 #TODO: aesthetics
 #TODO: avoid empty plots (dic not in plotData) 
 def histImgSec(plotData, metaData, outDir, std=False):
@@ -94,11 +93,14 @@ def histImgSec(plotData, metaData, outDir, std=False):
             labelsPos.append(plotData_x[1]) #middle
             labels.append(m)
 
+
             # Bar chart
-            plt.bar(plotData_x, examples_per_sec_sort, width,
-                    align='center', facecolor='g', alpha=0.5, edgecolor='w')
+            pl = plt.bar(plotData_x, examples_per_sec_sort, width,
+                align='center', color=['lawngreen', 'forestgreen', 'darkgreen']
+                , alpha=0.7, edgecolor='w')
+            # Standard deviation
+            #TODO aesthetics
             if (std):
-                #TODO aesthetics
                 plt.errorbar(plotData_x, examples_per_sec_sort,
                         yerr=stdevs_sort, fmt='k.', ecolor='k', elinewidth=2)
             # Bar labels
@@ -113,8 +115,11 @@ def histImgSec(plotData, metaData, outDir, std=False):
         plt.xticks(labelsPos, labels)
         plt.xlabel('Model')
         plt.ylabel('Images/sec')
-        plt.title('Training: %s - %s - 1,2 and 4 GPUs - %s Dataset'
-                %(metaData[0], metaData[1], ds)) #TODO nicer title
+        
+        plt.legend(pl, ["1 GPU", "2 GPUs", "4 GPUs"],  fontsize="small")
+        
+        plt.title('Training: %s - %s - %s Dataset'
+                %(metaData[0], metaData[1], ds))
 
         filename = ds + '-Training.png'
         plt.savefig(outDir + '/' + filename)
@@ -193,9 +198,9 @@ def histCompareTwoSets(plotData1, plotData2, metaData, outDir):
             if len(ex_per_sec_1) == 0 or len(ex_per_sec_2) == 0:
                 continue
     
-            filename = metaData[2] + '-' + ds + '-' + metaData[3] + '.png'
+            filename = metaData[2] + '-' + ds + '-' + m + '-' + metaData[3] + '.png'
             outPath = outDir + '/' + filename
-            metaData.append(ds)
+            metaData.append(ds + ' - ' + m)
             plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, metaData,
                     outPath)
     return
@@ -220,12 +225,12 @@ def plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, metaData, outPath
     p1 = plt.bar(pos, ex_per_sec_1_sort, width,
             align='center', facecolor='r', alpha=0.5, edgecolor='w')
     for j, v in enumerate(ex_per_sec_1_sort):
-        plt.text(j - width/2, v + 3, str("%.2f" % v), color='k')
+        plt.text(j - width/2, v + 3, str("%i" % v), color='k')
     # second set plots 
     p2 = plt.bar([p + width for p in pos], ex_per_sec_2_sort, width,
             align='center', facecolor='g', alpha=0.5, edgecolor='w')
     for j, v in enumerate(ex_per_sec_2_sort):
-        plt.text(j + width/2, v + 3, str("%.2f" % v), color='k')
+        plt.text(j + width/2, v + 3, str("%i" % v), color='k')
     # Bar labels
     labelsPos = [p + width/2 for p in pos]
     labels = sorted(gpus_2)
@@ -356,7 +361,7 @@ if __name__ == "__main__":
             outDir = os.path.join(plotDir, f)
             if not os.path.exists(outDir):
                 os.makedirs(outDir)
-            histImgSec(plotData, metaData[i], outDir)
+            histImgSec(plotData, metaData[i], outDir) 
             histCompareRealSynth(plotData, metaData[i], outDir)
             plotScaling(plotData, metaData[i], outDir)  
  
@@ -387,7 +392,6 @@ if __name__ == "__main__":
             if not os.path.exists(outDir):
                 os.makedirs(outDir)
             histCompareTwoSets(plotData1, plotData2, meta, outDir)
-
     # Plot scaling 500 batches, real + synth
     #TODO
 
