@@ -384,10 +384,10 @@ if __name__ == "__main__":
             'fh2_udocker_5epoch',       'fh2_udocker_500batch',
             'fh2_singularity_5epoch',   'fh2_singularity_500batch']
 
-    metaData = [['LSDF', 'Udocker', '5 epochs'],        ['LSDF', 'Udocker', '500 batches'],
-                ['LSDF', 'Singularity', '5 epochs'],    ['LSDF', 'Singularity', '500 batches'],
-                ['ForHLR2', 'Udocker', '5 epochs'],     ['ForHLR2', 'Udocker', '500 batches'],
-                ['ForHLR2', 'Singularity', '5 epochs'], ['ForHLR2', 'Singularity', '500 batches']]
+    metaData = [['LSDF', 'Udocker', '5_epochs'],        ['LSDF', 'Udocker', '500_batches'],
+                ['LSDF', 'Singularity', '5_epochs'],    ['LSDF', 'Singularity', '500_batches'],
+                ['ForHLR2', 'Udocker', '5_epochs'],     ['ForHLR2', 'Udocker', '500_batches'],
+                ['ForHLR2', 'Singularity', '5_epochs'], ['ForHLR2', 'Singularity', '500_batches']]
 
     #-----------------------------------------------------------------
     
