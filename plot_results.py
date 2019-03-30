@@ -6,6 +6,7 @@
 
 import os
 import json
+import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
@@ -255,6 +256,7 @@ def plotScaling(plotData, metaData, outDir):
 
     # One plot for each dataset 
     for ds in datasets:
+        plt.clf()
         for m in models:    
             width = 0.25
             labels = []
@@ -291,10 +293,9 @@ def plotScaling(plotData, metaData, outDir):
         plt.title('Speedup: %s - %s - %s Dataset' %(metaData[0], metaData[1], ds))
         plt.grid()
 
-        filename = ds + '- scaling.png'
+        filename = ds + '-Scaling.png'
         outPath = outDir + '/' + filename
         plt.savefig(outPath)
-        plt.clf()
     return
 
 
@@ -303,6 +304,57 @@ def plotScaling(plotData, metaData, outDir):
 ## Evaluation accuracy
 
 ## Evaluation examples/sec
+
+
+##Comparison Table
+def createCompTable(fileData1, fileData2, metaData, outDir):
+    datasets = ['Synthetic', 'ImageNet']  
+    models = ['AlexNet', 'ResNet50']
+
+    head = ['#GPUs', 'LSDF', 'FH2', 'official TF']
+    gpus = ['1','2','4']
+
+    # One  table for each dataset and model
+    for ds in datasets:
+        for m in models:    
+            ex_per_sec_1 = []
+            gpus_1 = []
+            ex_per_sec_2 = []
+            gpus_2 = []
+            # Find all models that were used on the current dataset
+            for key, value in fileData1.items():
+                if m.lower() in key.lower():
+                    if ds.lower() in key.lower():
+                        ex_per_sec_1.append(value['averages'].get('average_examples_per_sec'))
+                        gpus_1.append(value['benchmark_params'].get('num_gpus'))
+            for key, value in fileData2.items():
+                if m.lower() in key.lower():
+                    if ds.lower() in key.lower():
+                        ex_per_sec_2.append(value['averages'].get('average_examples_per_sec'))
+                        gpus_2.append(value['benchmark_params'].get('num_gpus'))
+                        
+            if len(ex_per_sec_1) == 0 or len(ex_per_sec_2) == 0:
+                continue
+ 
+            gpus_1_idx = np.array(gpus_1).argsort()    
+            ex_per_sec_1_sort = np.array(ex_per_sec_1)[gpus_1_idx].astype(int)
+            gpus_2_idx = np.array(gpus_2).argsort()    
+            ex_per_sec_2_sort = np.array(ex_per_sec_2)[gpus_2_idx].astype(int)
+            
+            lines = []
+            lines.append(head)
+            for i,v in enumerate(ex_per_sec_1_sort):
+                lines.append([gpus[i], ex_per_sec_1_sort[i],
+                    ex_per_sec_2_sort[i], ''])
+
+            filename = metaData[0] + '-' + ds + '-' + m + '-' + metaData[1] + '.csv'
+            outPath = outDir + '/' + filename
+
+            with open(outPath, 'w') as write_file:
+                writer = csv.writer(write_file)
+                writer.writerows(lines)
+            write_file.close()
+    return
 
 
 #-----------------------------------------------------------------
@@ -318,11 +370,14 @@ if __name__ == "__main__":
     # Target location for plots
     plotDir = "%s/training_plots" %wd    
     compDir = "%s/comparison_plots" %wd
+    tableDir = "%s/comp_tables" %wd
 
     if not os.path.exists(plotDir):
         os.makedirs(plotDir)
     if not os.path.exists(compDir):
         os.makedirs(compDir)
+    if not os.path.exists(tableDir):
+        os.makedirs(tableDir)
 
     folders = ['lsdf_udocker_5epoch',   'lsdf_udocker_500batch',
             'lsdf_singularity_5epoch',  'lsdf_singularity_500batch',
@@ -337,19 +392,22 @@ if __name__ == "__main__":
     #-----------------------------------------------------------------
     
     ## Debug ##        
-    """procFiles = os.path.join(resultDir, folders[1])
+    """
+    procFiles = os.path.join(resultDir, folders[1])
     print('Processing: ' + procFiles)
     plotData = readFiles(procFiles)
     outDir = os.path.join(plotDir, folders[1])
     if not os.path.exists(outDir):
         os.makedirs(outDir)
-    histImgSec(plotData, metaData[1], outDir)
+    #histImgSec(plotData, metaData[1], outDir)
+    plotScaling(plotData, metaData[1], outDir)  
+
     """
 
     # Plot bar charts for all folders:
     # 1) Imgs/sec per num_gpu to compare models, per dataset.
     # 2) Comparison of synthetic vs real data (imagenet).
-    # 3) Scaling single folder, real&synth extra
+    # 3) Scaling single folder, real&synth extra0
     for i,f in enumerate(folders):
         procFiles = os.path.join(resultDir, f)
         print('Processing: ' + procFiles)
@@ -361,7 +419,7 @@ if __name__ == "__main__":
             histImgSec(plotData, metaData[i], outDir) 
             histCompareRealSynth(plotData, metaData[i], outDir)
             plotScaling(plotData, metaData[i], outDir)  
- 
+
     # Plot comparison between singularity & udocker, all machines, all data 
     for i in [0,1,4,5]:
         procFiles1 = os.path.join(resultDir, folders[i])
@@ -389,9 +447,23 @@ if __name__ == "__main__":
             if not os.path.exists(outDir):
                 os.makedirs(outDir)
             histCompareTwoSets(plotData1, plotData2, meta, outDir)
+
     # Plot scaling 500 batches, real + synth
     #TODO
-
     # Plot scaling comparison per dataset, udocker vs sing, lsdf
     # vs fh2
     #TODO
+
+    # Produce comparison tables lsdf vs fh2 vs dummy column
+    # Dummy column is for extra entries such as official tf results
+    for i in [0,1,4,5]:
+        procFiles1 = os.path.join(resultDir, folders[i])
+        fileData1 = readFiles(procFiles1)
+        procFiles2 = os.path.join(resultDir, folders[i+2])
+        fileData2 = readFiles(procFiles2)
+        meta = [metaData[i][1], metaData[i][2]]
+        if fileData1 and fileData2:
+            outDir = tableDir
+            if not os.path.exists(outDir):
+                os.makedirs(outDir)
+            createCompTable(fileData1, fileData2, meta, outDir)
