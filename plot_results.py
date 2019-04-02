@@ -168,7 +168,6 @@ def histCompareTwoSets(plotData1, plotData2, metaData, outDir):
     """ Function to plot histogams that compare images/sec for 
         two different sets. Compares per num_gpu.
         Requires: same dataset, same model.
-        Currently only doing real datasets!
     """
     datasets = ['Synthetic', 'ImageNet', 'CIFAR10'] 
     models = ['AlexNet', 'ResNet50', 'ResNet56']
@@ -176,6 +175,7 @@ def histCompareTwoSets(plotData1, plotData2, metaData, outDir):
     # One plot for each dataset and model to have all comparisons
     for ds in datasets:
         for m in models:    
+            meta = metaData.copy()
             ex_per_sec_1 = []
             gpus_1 = []
             ex_per_sec_2 = []
@@ -197,8 +197,8 @@ def histCompareTwoSets(plotData1, plotData2, metaData, outDir):
     
             filename = metaData[2] + '-' + ds + '-' + m + '-' + metaData[3] + '.png'
             outPath = outDir + '/' + filename
-            metaData.append(ds + ' - ' + m)
-            plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, metaData,
+            meta.append(ds + ' - ' + m)
+            plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, meta,
                     outPath)
     return
 
@@ -459,7 +459,7 @@ if __name__ == "__main__":
     for i in [0,1,4,5]:
         procFiles1 = os.path.join(resultDir, folders[i])
         fileData1 = readFiles(procFiles1)
-        procFiles2 = os.path.join(resultDir, folders[i+2])
+        procFiles2 = os.path.join(resultDir, folders[i+4])
         fileData2 = readFiles(procFiles2)
         meta = [metaData[i][1], metaData[i][2]]
         if fileData1 and fileData2:
