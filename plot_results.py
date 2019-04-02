@@ -456,7 +456,7 @@ if __name__ == "__main__":
 
     # Produce comparison tables lsdf vs fh2 vs dummy column
     # Dummy column is for extra entries such as official tf results
-    for i in [0,1,4,5]:
+    for i in range(4):
         procFiles1 = os.path.join(resultDir, folders[i])
         fileData1 = readFiles(procFiles1)
         procFiles2 = os.path.join(resultDir, folders[i+4])
