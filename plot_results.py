@@ -1,8 +1,11 @@
-#############################################################################
-#TODO description
+##############################################################################
+# Script to plot diferent diagrams for the tf_cnn_tf_benchmark. 
+# Reards the parsed JSON data into a dict. Then produces plots for imgs/sec,
+# Speedup comparison and various comparison plots between different configu-
+# rations. Further variations possible.
 
 # Author: Adrian Grupp
-#############################################################################
+##############################################################################
 
 import os
 import json
@@ -51,7 +54,6 @@ def getBenchParams(data):
 
 
 ### Histogramm Images/sec for 1,2,4 gpus, no dataset comaprison
-#TODO colors of bars
 #TODO avoid empty plots (dic not in plotData) 
 def histImgSec(plotData, metaData, outDir, std=False):
     """ Function to plot histogams that compare images/sec for 
@@ -239,7 +241,7 @@ def plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, metaData, outPath
 
     plt.legend((p1[0], p2[0]), (metaData[0], metaData[1]), fontsize="small")
     plt.title('%s vs %s - %s - %s ' %(metaData[0], metaData[1], metaData[2],
-        metaData[4])) #TODO maybe add epochs to title
+        metaData[4]))
     plt.savefig(outPath)
     return
 
@@ -300,11 +302,13 @@ def plotScaling(plotData, metaData, outDir):
 
 
 ## Runtime
+#TODO
 
 ## Evaluation accuracy
+#TODO
 
 ## Evaluation examples/sec
-
+#TODO
 
 ##Comparison Table
 def createCompTable(fileData1, fileData2, metaData, outDir):
@@ -361,7 +365,6 @@ def createCompTable(fileData1, fileData2, metaData, outDir):
 if __name__ == "__main__":
     #TODO argv for selection of plot mode?
     #TODO useful output for data being processed
-    #TODO: Nicer text?
 
     # Dir for benchmark data
     wd = os.getcwd()
@@ -450,8 +453,7 @@ if __name__ == "__main__":
 
     # Plot scaling 500 batches, real + synth
     #TODO
-    # Plot scaling comparison per dataset, udocker vs sing, lsdf
-    # vs fh2
+    # Plot scaling comparison per dataset, udocker vs sing, lsdf vs fh2
     #TODO
 
     # Produce comparison tables lsdf vs fh2 vs dummy column
