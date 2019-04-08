@@ -6,6 +6,8 @@
 
 # Author: Adrian Grupp
 ##############################################################################
+#TODO dashed grids?
+#TODO bar labels smetimes off for small values
 
 import os
 import json
