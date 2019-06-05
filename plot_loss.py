@@ -175,7 +175,7 @@ if __name__ == "__main__":
     loss_plot = plt.legend(loc="upper right")
     loss_plot = plt.xlabel('epoch')
     loss_plot = plt.ylabel('Loss')
-    loss_plot = plt.title('Loss: %s - %s - %s ' %("1-2-4 GPUs", args.dataset, args.network))
+    loss_plot = plt.title('Learning curves - %s - %s' %(args.dataset, args.network))
 
     #plt.show()
     file_name = "loss" + '-' + args.dataset + '-' + args.network + img_extension
