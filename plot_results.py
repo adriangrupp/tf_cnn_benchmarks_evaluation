@@ -17,6 +17,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 #----------------------------
 
+img_extension = ".pdf"
+legend_loc="upper left"
+
+txt_alignment = {'horizontalalignment': 'center', 'verticalalignment': 'baseline'}
+
+google_results = { 'Synthetic': { 'AlexNet' : [656, 1209, 2328],
+                                  'ResNet50': [52, 99, 195]
+                                 },
+                   'ImageNet' : { 'AlexNet' : [639, 1136, 2067],
+                                  'ResNet50': [51, 99, 194]
+                                 }
+                 }
+
 def readFiles(rootDir):
     """ Read all benchmark log files for a certain container used.
         Store them accoding to their metadata. Structure is as follows:
@@ -55,7 +68,7 @@ def getBenchParams(data):
     return numEpochs, numBatches, numGPUs, model, dataset
 
 
-### Histogramm Images/sec for 1,2,4 gpus, no dataset comaprison
+### Histogramm Images/sec for 1,2,4 gpus, no dataset comparison
 #TODO avoid empty plots (dic not in plotData) 
 def histImgSec(plotData, metaData, outDir, std=False):
     """ Function to plot histogams that compare images/sec for 
@@ -63,6 +76,9 @@ def histImgSec(plotData, metaData, outDir, std=False):
     """
     datasets = ['CIFAR10', 'Synthetic', 'ImageNet'] 
     models = ['ResNet50', 'ResNet56', 'AlexNet']
+    
+    patterns = ('', '++', 'xxx', '*', '-', '+', 'o', 'O', '.') #'-'
+    barcolors = ('lightsalmon', 'red', 'indianred')  #indianred('lawngreen', 'forestgreen', 'darkgreen')
 
     # One plot for each dataset to compare models' performance
     for ds in datasets:
@@ -72,8 +88,9 @@ def histImgSec(plotData, metaData, outDir, std=False):
 
         i = 0
         width = 0.9
+        ymax = 1
         labels = []
-        labelsPos = []
+        labelsPos = []    
 
         # Find all models that were used on the current dataset
         for m in models:    
@@ -100,8 +117,13 @@ def histImgSec(plotData, metaData, outDir, std=False):
 
             # Bar chart
             pl = plt.bar(plotData_x, examples_per_sec_sort, width,
-                align='center', color=['lawngreen', 'forestgreen', 'darkgreen']
-                , alpha=0.7, edgecolor='w')
+                 align='center', color=barcolors,
+                 edgecolor='white', linewidth=0)   #edgecolor='w' alpha=0.7, 
+
+            # change style of filling    
+            for bar, pattern in zip(pl, patterns):
+                bar.set_hatch(pattern)
+                
             # Standard deviation
             #TODO style 
             if (std):
@@ -109,9 +131,40 @@ def histImgSec(plotData, metaData, outDir, std=False):
                         yerr=stdevs_sort, fmt='k.', ecolor='k', elinewidth=2)
             # Bar labels
             else:
+                if examples_per_sec_sort[-1] > ymax:
+                    ymax = examples_per_sec_sort[-1]
+                    
                 for j, v in enumerate(examples_per_sec_sort):
-                    plt.text(plotData_x[j] - width/4, v + 4, str("%i" % v),
-                            color='k', fontsize='small')
+                    v_data_txt = v + 20
+                    v_google_txt = v - 90
+                    v_scale_txt = v + 90
+                    google_colors = barcolors[j]
+                    if examples_per_sec_sort[-1] < 400:
+                        v_data_txt = 346
+                        v_google_txt = 335 - 75
+                        v_scale_txt = 335 + 95
+                        google_colors = 'white'
+                    
+                    data_txt = str(v)
+                    plt.text(plotData_x[j], v_data_txt, data_txt,     # "%i" % v),             # 25.
+                            color='black', fontsize='small', **txt_alignment)
+                    
+                    if ds in google_results:
+                        google_txt = "(" + str(google_results[ds][m][j]) + ")"
+                        #if len(google_txt) < 6:
+                        #    google_txt = " " * (6-len(google_txt)) + google_txt
+                        plt.text(plotData_x[j], v_google_txt,
+                                 google_txt,
+                                 color='k', fontsize='small', 
+                                 bbox=dict(boxstyle="square", 
+                                           fc=google_colors,
+                                           ec=google_colors),
+                                **txt_alignment)
+                    if j > 0:
+                        plt.text(plotData_x[j], v_scale_txt,                    # 2.2
+                                 #str(r"$\times$%.1f" % (v/examples_per_sec_sort[0].astype(float))),
+                                 str('{}{:3.1f}'.format(r"$\times$", v/examples_per_sec_sort[0].astype(float))),
+                                 color='k', fontsize='small', **txt_alignment)
             i+=1
 
         if len(labels) == 0:
@@ -120,13 +173,15 @@ def histImgSec(plotData, metaData, outDir, std=False):
         plt.xticks(labelsPos, labels)
         plt.xlabel('Model')
         plt.ylabel('Images/sec')
+        #plt.ylim(bottom=-50)
+        plt.ylim(top=(ymax + 200.))
         
-        plt.legend(pl, ["1 GPU", "2 GPUs", "4 GPUs"],  fontsize="small")
+        plt.legend(pl, ["1 GPU", "2 GPUs", "4 GPUs"], fontsize="medium", loc=legend_loc)  #fontsize="small"
         
         plt.title('Training: %s - %s - %s Dataset'
                 %(metaData[0], metaData[1], ds))
 
-        filename = ds + '-Training.png'
+        filename = ds + '-Training' + img_extension
         plt.savefig(outDir + '/' + filename)
     return    
     
@@ -159,9 +214,9 @@ def histCompareRealSynth(plotData, metaData, outDir):
         if len(real_ex_per_sec) == 0 or len(synt_ex_per_sec) == 0:
                 continue
 
-        filename = m + '-SynthVsReal.png'
-        outPath = outDir + '/' + filename            
-        meta = ['Synthetic', 'Real Data', metaData[0], metaData[2], metaData[1]]
+        filename = m + '-SynthVsReal' + img_extension
+        outPath = outDir + '/' + filename
+        meta = ['Synthetic', 'Real Data', metaData[0], metaData[2], metaData[1], m]
         plotComparison(synt_ex_per_sec, synt_gpus, real_ex_per_sec,
                 real_gpus, meta, outPath)
     return
@@ -199,7 +254,7 @@ def histCompareTwoSets(plotData1, plotData2, metaData, outDir):
             if len(ex_per_sec_1) == 0 or len(ex_per_sec_2) == 0:
                 continue
     
-            filename = metaData[2] + '-' + ds + '-' + m + '-' + metaData[3] + '.png'
+            filename = metaData[2] + '-' + ds + '-' + m + '-' + metaData[3] + img_extension
             outPath = outDir + '/' + filename
             meta.append(ds + ' - ' + m)
             plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, meta,
@@ -219,19 +274,32 @@ def plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, metaData, outPath
     gpus_2_idx = np.array(gpus_2).argsort()    
     ex_per_sec_2_sort = np.array(ex_per_sec_2)[gpus_2_idx]
 
-    width = 0.25
+    width = 0.33
     pos = list(range(len(ex_per_sec_1)))
 
     # first set polts
     p1 = plt.bar(pos, ex_per_sec_1_sort, width,
-            align='center', facecolor='r', alpha=0.5, edgecolor='w')
+            align='center', facecolor='r', edgecolor='w', hatch='++')  #alpha=0.5,
     for j, v in enumerate(ex_per_sec_1_sort):
-        plt.text(j - width + 0.15, v + 4, str("%i" % v), color='k')
+        plt.text(j, v + 4, str("%i" % v), color='k', **txt_alignment)
+                
     # second set plots 
     p2 = plt.bar([p + width for p in pos], ex_per_sec_2_sort, width,
-            align='center', facecolor='g', alpha=0.5, edgecolor='w')
+            align='center', facecolor='mediumseagreen', edgecolor='w', hatch='xxx')  #alpha=0.5
+    
+    h_shift = ex_per_sec_2_sort[-1].astype(float)/18.
     for j, v in enumerate(ex_per_sec_2_sort):
-        plt.text(j + width - 0.1, v + 4, str("%i" % v), color='k')
+        plt.text(j + width, v + 4, 
+                 str("%i" % v), color='k', **txt_alignment)
+        if metaData[1] == "Real Data":
+            plt.text(j + width, v - h_shift, 
+                     str("(%i)" % google_results['ImageNet'][metaData[5]][j]),
+                     color='k', fontsize='small',
+                     bbox=dict(boxstyle="square", 
+                               fc='mediumseagreen',
+                               ec='mediumseagreen'),
+                     **txt_alignment)        
+
     # Bar labels
     labelsPos = [p + width/2 for p in pos]
     labels = sorted(gpus_2)
@@ -240,8 +308,12 @@ def plotComparison(ex_per_sec_1, gpus_1, ex_per_sec_2, gpus_2, metaData, outPath
     plt.xticks(labelsPos, labels)
     plt.xlabel('#GPUs')
     plt.ylabel('Images/sec')
+    ymax = ex_per_sec_2_sort[-1]
+    if ex_per_sec_2_sort[-1] < ex_per_sec_1_sort[-1] :
+        ymax = ex_per_sec_1_sort[-1]
+    plt.ylim(top=1.1*ymax.astype(float))
 
-    plt.legend((p1[0], p2[0]), (metaData[0], metaData[1]), fontsize="small")
+    plt.legend((p1[0], p2[0]), (metaData[0], metaData[1]), fontsize="medium", loc=legend_loc)
     plt.title('%s vs %s - %s - %s ' %(metaData[0], metaData[1], metaData[2],
         metaData[4]))
     plt.savefig(outPath)
@@ -258,11 +330,15 @@ def plotScaling(plotData, metaData, outDir):
     datasets = ['Synthetic', 'ImageNet', 'CIFAR10']  
     models = ['AlexNet', 'ResNet50', 'ResNet56']
 
+    linestyles = (':', '--', '--')
+    linecolors = ('red', 'blue', 'blue')
+    linewidths = (5., 2.5, 2.5)
+    markers = ('o', '^', '^')
+   
     # One plot for each dataset 
     for ds in datasets:
         plt.clf()
-        for m in models:    
-            width = 0.25
+        for im, m in enumerate(models): #lstyle, lcolor in zip(models, linestyles, linecolors):
             labels = []
             labelsPos = []
             ex_per_sec = []
@@ -280,24 +356,30 @@ def plotScaling(plotData, metaData, outDir):
             gpus_idx = np.array(gpus).argsort()    
             gpus_sort = sorted(gpus)
             ex_per_sec_sort = np.array(ex_per_sec)[gpus_idx]
-            
+          
             # Ideal number of images is number of images for 1 gpu times num_gpus
             scaling = [x/ex_per_sec_sort[0] for x in ex_per_sec_sort]
-            plt.plot(gpus_sort, scaling, label=m)
+            plt.plot(gpus_sort, scaling, label=m, linestyle=linestyles[im], 
+                     color=linecolors[im], linewidth=linewidths[im],
+                     marker=markers[im], markersize=10, fillStyle="none", 
+                     mew=1.5)       
         
 
         # ideal scaling
-        plt.plot([1,2,4], [1,2,4], label='Ideal')
+        plt.plot([1,2,4], [1,2,4], label='Ideal', linestyle="-", 
+                 color="silver", linewidth=2.5)
 
         plt.xticks([1,2,3,4], [1,2,3,4])
+        plt.xlim(0.9, 4.1)
+        plt.ylim(0.9, 4.1)
         plt.xlabel('#GPUs')
         plt.ylabel('Speedup')
     
-        plt.legend(loc=2, fontsize="small")
+        plt.legend(fontsize="medium", loc=legend_loc)  #loc=2 fontsize="small"
         plt.title('Speedup: %s - %s - %s Dataset' %(metaData[0], metaData[1], ds))
         plt.grid()
 
-        filename = ds + '-Scaling.png'
+        filename = ds + '-Scaling' + img_extension
         outPath = outDir + '/' + filename
         plt.savefig(outPath)
     return
@@ -384,15 +466,23 @@ if __name__ == "__main__":
     if not os.path.exists(tableDir):
         os.makedirs(tableDir)
 
+#    folders = ['lsdf_udocker_5epoch',   'lsdf_udocker_500batch',
+#            'lsdf_singularity_5epoch',  'lsdf_singularity_500batch',
+#            'fh2_udocker_5epoch',       'fh2_udocker_500batch',
+#            'fh2_singularity_5epoch',   'fh2_singularity_500batch']
+#
+#    metaData = [['LSDF', 'Udocker', '5_epochs'],        ['LSDF', 'Udocker', '500_batches'],
+#                ['LSDF', 'Singularity', '5_epochs'],    ['LSDF', 'Singularity', '500_batches'],
+#                ['ForHLR2', 'Udocker', '5_epochs'],     ['ForHLR2', 'Udocker', '500_batches'],
+#                ['ForHLR2', 'Singularity', '5_epochs'], ['ForHLR2', 'Singularity', '500_batches']]
+
     folders = ['lsdf_udocker_5epoch',   'lsdf_udocker_500batch',
-            'lsdf_singularity_5epoch',  'lsdf_singularity_500batch',
-            'fh2_udocker_5epoch',       'fh2_udocker_500batch',
-            'fh2_singularity_5epoch',   'fh2_singularity_500batch']
+               'lsdf_singularity_5epoch',  'lsdf_singularity_500batch',
+               'fh2_udocker_5epoch',       'fh2_udocker_500batch']
 
     metaData = [['LSDF', 'Udocker', '5_epochs'],        ['LSDF', 'Udocker', '500_batches'],
                 ['LSDF', 'Singularity', '5_epochs'],    ['LSDF', 'Singularity', '500_batches'],
-                ['ForHLR2', 'Udocker', '5_epochs'],     ['ForHLR2', 'Udocker', '500_batches'],
-                ['ForHLR2', 'Singularity', '5_epochs'], ['ForHLR2', 'Singularity', '500_batches']]
+                ['ForHLR2', 'Udocker', '5_epochs'],     ['ForHLR2', 'Udocker', '500_batches']]
 
     #-----------------------------------------------------------------
     
